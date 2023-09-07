@@ -3,6 +3,8 @@ title: "Week 3 Exercises"
 author: "J.Blondeau"
 date: "2023-09-02"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -22,35 +24,110 @@ triple stars renders a thin line across the page
 ```{r}
  #this is a code chunk, anything inside the back tics is like being in the R console.
 
+library(tidyverse)
+
+d <- read_excel("data/sttstj_all_sites.xlsx", sheet=2)
+
+#total number habitats
+unique(d$hab)
+
+#number pavement
+PVMT<-d%>%filter(hab=="PVMT")
+
+#number pavement or AGRF
+PA<-d%>%filter(hab=="PVMT"|hab=="AGRF")
+
+#number everything but pavement 
+NoPVMT<-d%>%filter(hab!="PVMT")
+
+
+#question 7
+
+d7<-d%>%filter(hab=="AGRF"|hab=="SCR")%>%select(yr_site, hab)
+head(d7)
+
+#question 8
+#arrange goes smallest to biggest, when do desc it goes biggest to smallest 
+bdrk<-d%>%filter(hab=="BDRK")%>%arrange(desc(lat))
+bdrk[1,]
+
+#question 9
+PA<-d%>%filter(hab=="AGRF"|hab=="PTRF")%>%arrange(lon)
+PA[1,]
+
+View(PA)
+
+#question 10
+split<-d %>% separate(yr_site, c('year', 'site'))
+View(split)
+
+#tell you the number of unique values 
+length(unique(split$year))
+
+#question 11
+
+P04<-split%>%filter(year=="2004"& hab=="PVMT")%>%arrange(lat)
+View(P04)
+P04[1,]
+
+
+
 
 
 ```
 ***
 
-2. How many samples are in the data set?         
+2. How many samples are in the data set?  
+
+2505 samples
 
 3. How many unique habitat types are there?  What are the names of each habitat?
 
+6, "PVMT" "AGRF" "SCR"  "PTRF" "BDRK" "HARD"
+
 4. How many sites are there in the "PVMT" habitat type?
+
+571 sites
 
 5. How many sites are there in the "PVMT" or "AGRF" habitat types?
 
+1538 sites
+
 6. How many sites are there in all the habitat types EXCEPT "PVMT"?
+
+1934 sites
 
 7. Show the first 5 records (rows) of...
     - all sites sampled in "AGRF" or "SCR"
     - only show the "yr_site" and "hab" columns
     
+    
+      yr_site  hab  
+  <chr>    <chr>
+1 2001_243 AGRF 
+2 2001_244 AGRF 
+3 2001_247 AGRF 
+4 2001_249 SCR  
+5 2001_256 AGRF 
+    
 <!-- extra line break -->
 <br>
 
 8. What is the northern most site sampled in the "BDRK" habitat?
+Northernmost is biggest number in latitude 
+5450
 
 9. What is the western most site sampled in either "AGRF" or "PTRF" habitat?
 
+bigger negative number is more west 
+
+9758
+
 10. How many years were surveyed in the data set?
+
+16
 
 11. What is the southern most site sample in the "PVMT" habitat in 2004?
 
-
+1932
 
